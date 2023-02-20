@@ -1,6 +1,6 @@
 /**
  * content script
- * 웹페이지 context에서 javascript를 실행
+ * 웹페이지 context에서 javascript를 실행 ( 열려있는 브라우저 개발자 도구창에서 확인 )
  * 주입된 페이지의 DOM을 읽고 수정 가능
  * chrome API의 하위 집합만 사용 ( 확장 서비스 작업자와 Message를 교환하면서 나머지에 간접적으로 엑세스 가능)
  */
@@ -14,10 +14,19 @@ const fillForm = (params) => {
   }
 };
 
-chrome.runtime.onMessage.addListener((request, callback, sendResponse) => {
+chrome.runtime.onMessage.addListener(function (
+  request,
+  callback,
+  sendResponse
+) {
   switch (request.message) {
     case "FILL":
       fillForm(request.params);
+      sendResponse({
+        received: true,
+      });
       break;
   }
 });
+
+// chrome.runtime.onMessage.addListener((request, callback, sendResponse) => {});

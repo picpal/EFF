@@ -15,7 +15,7 @@ const openIndexDB = () => {
   request.onblocked = () => {
     request.result.close();
 
-    //관련작업을 처리해야함
+    //관련작업을 처리 해야함
     // onversionchange핸들러에서 close()가 성공적처로 처리되면 발생하지 않음
   };
 
@@ -167,7 +167,7 @@ const addItem = async (storeName, value) => {
 const deleteItem = (storeName, uid) => {
   const dbRequest = openIndexDB();
 
-  //store가존재하지 않는ㄱ ㅕㅇ우 대비
+  //store가존재하지 않는 경우 대비
   dbRequest.onupgradeneeded = () => {
     const db = dbRequest.result;
     if (!db.objectStoreNames.contains(storeName)) {
@@ -190,6 +190,45 @@ const deleteItem = (storeName, uid) => {
     const transaction = db.transaction([storeName], "readwrite");
     const store = transaction.objectStore(storeName);
     const request = store.delete(uid);
+
+    request.onerror = (e) => {
+      if (request.error.name === "ConstraintError") {
+        console.error(`ConstraintError :  ${request.error}`);
+        event.preventDefault();
+      } else {
+        console.error(`add Data Error : ${request.error}`);
+        transaction.abort(); // stop transaction
+      }
+    };
+  };
+};
+
+const deleteAllItem = (storeName) => {
+  const dbRequest = openIndexDB();
+
+  //store가존재하지 않는 경우 대비
+  dbRequest.onupgradeneeded = () => {
+    const db = dbRequest.result;
+    if (!db.objectStoreNames.contains(storeName)) {
+      db.createObjectStore(storeName, { keyPath: KEY_PATY });
+    }
+  };
+
+  dbRequest.onerror = () => {
+    console.error(`IDB open Error : ${dbRequest.error}`);
+  };
+
+  dbRequest.onsuccess = () => {
+    const db = dbRequest.result;
+
+    db.onversionchange = () => {
+      console.error("Database is outdated, please reload the page");
+      db.close();
+    };
+
+    const transaction = db.transaction(storeName, "readwrite");
+    const store = transaction.objectStore(storeName);
+    const request = store.clear();
 
     request.onerror = (e) => {
       if (request.error.name === "ConstraintError") {
@@ -355,16 +394,16 @@ const getDate = (format) => {
   const date = new Date();
   const year = String(date.getFullYear());
   const month = String(date.getMonth());
+  const day = String(date.getDay());
+  const time = String(date.getTime());
 
   let result = "";
   switch (format) {
-    case "YYYYMMDD":
-      break;
-    case "YYYYMMDDhhmmss":
-      break;
-    case "YYYYMMDDhhmmssmm":
+    case "fullDate":
+      result = `${year}+${month}${day}${time}`;
       break;
     default: // YYYYMMDD
+      result = `${year}${month}${day}`;
       break;
   }
 
@@ -372,9 +411,7 @@ const getDate = (format) => {
 };
 
 const getUid = () => {
-  return (
-    getDate("YYYYMMDDhhmmssmm") + String(Math.round(Math.random() * 1000000))
-  );
+  return getDate("fullDate") + String(Math.round(Math.random() * 1000000));
 };
 
 const initState = () => {
@@ -438,7 +475,7 @@ chrome.runtime.onMessage.addListener((request, callback, sendResponse) => {
       getItem(STORE_NAMES[0], request.uid).then((result) => {
         result.tabTitle = request.tabTitle;
 
-        // 이부분 어차피 덮니쓰기니까 개선방향이 있을것 같음
+        // 이 부분 어차피 덮어쓰기니까 개선방향이 있을 것 같음
         addItem(STORE_NAMES[1], result).then((result) => {
           sendResponse(result);
         });
@@ -451,12 +488,15 @@ chrome.runtime.onMessage.addListener((request, callback, sendResponse) => {
       const { uid, tabId } = request.params;
       deleteItem(tabId, uid);
       break;
+    case "DELETE_ALL":
+      deleteAllItem(request.params.tabId);
+      break;
     default:
       sendResponse(null);
       break;
   }
 
-  return true; // return 이 있어야 extension과동기화 처리가 됨
+  return true; // return 이 있어야 extension과 동기화 처리가 됨
 });
 
 chrome.webRequest.onBeforeRequest.addListener(

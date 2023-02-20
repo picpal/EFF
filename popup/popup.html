@@ -1,142 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/dist/tailwind.css">
-  <link rel="stylesheet" href="/css/popup.css">
-</head>
-<body>
-  <!-- wrap -->
-  <div class="p-5 pr-4 pb-8 w-96">
-    <!-- header -->
-    <header id="easyFill_header" class="relative">
-      <!-- nav tab -->
-      <div id="nav_tab" class="tabta">
-        <!-- nav item -->
-        <ul class="flex flex-row gap-0">
-          <li class="p-3 pt-2 pb-2 cursor-pointer border-b-2 border-white hover:border-blue-400 activeTab" data-tab-id="HISTORY">History</li>
-          <li class="p-3 pt-2 pb-2 cursor-pointer border-b-2 border-white hover:border-blue-400" data-tab-id="FAVORITE">Favorite</li>
-          <li class="p-3 pt-2 pb-2 cursor-pointer border-b-2 border-white hover:border-blue-400" data-tab-id="SETTINGS">Settings</li>
-        </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/dist/tailwind.css" />
+    <link rel="stylesheet" href="/css/popup.css" />
+    <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css" />
+  </head>
+  <body>
+    <!-- wrap -->
+    <div class="p-2 pt-2 pb-5 w-96">
+      <!-- header -->
+      <header id="easyFill_header" class="p-4 pb-1 mb-3 relative">
+        <!-- nav tab -->
+        <div id="nav_tab" class="tabta">
+          <!-- nav item -->
+          <ul class="flex flex-row gap-0">
+            <li
+              class="p-3 pt-2 pb-2 cursor-pointer border-b-2 border-white hover:border-blue-400 activeTab"
+              data-tab-id="HISTORY"
+            >
+              History
+            </li>
+            <li
+              class="p-3 pt-2 pb-2 cursor-pointer border-b-2 border-white hover:border-blue-400"
+              data-tab-id="FAVORITE"
+            >
+              Favorite
+            </li>
+            <li
+              class="p-3 pt-2 pb-2 cursor-pointer border-b-2 border-white hover:border-blue-400"
+              data-tab-id="SETTINGS"
+            >
+              Settings
+            </li>
+          </ul>
 
-        <!-- toggle button -->
-        <div id="all_history" class="absolute flex items-center justify-center mb-12">
-          <label for="toggle_btn" class="flex items-center cursor-pointer">
-            <div class="toggle_label text-green-600 pr-3">All History</div>
-            <div class="relative">
-              <input type="checkbox" id="toggle_btn" data-btn-id="ALL_HISTORY">
-              <div class="w-10 h-4 bg-gray-300 rounded-full shadow-inner"></div>
-              <div class="toggle_dot absolute w-6 h-6 bg-white rounded-full shadow transition"></div>
-            </div>
-          </label>
-        </div>
-
-        <!-- search bar -->
-        <section id="sch_bar" class="mt-5">
-          <div class="flex flex-row gap-1 h-8">
-            <div class="flex justify-center w-3/12">
-              <div class="mb-3 w-full">
-                <select name="search_div" id="search_div" 
-                class="form-select w-full appearnce-none block
-                text-xs font-normal text-gray-700
-                bg-white bg-no-repeat 
-                border border-solid border-gray-300 rounded 
-                transition-all ease-in-out m-0
-                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                aria-label="Search Menu select Box">
-                  <option value="URL" selected>URL</option>
-                  <option value="TITLE" selected>TITLE</option>
-                </select>
+          <!-- toggle button -->
+          <div
+            id="all_history"
+            class="absolute top-3 right-4 flex items-center justify-center"
+          >
+            <label for="toggle_btn" class="flex items-center cursor-pointer">
+              <div class="toggle_label text-green-600 pr-3">All History</div>
+              <div class="relative">
+                <input
+                  type="checkbox"
+                  id="toggle_btn"
+                  class="absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0 z-10"
+                  data-btn-id="ALL_HISTORY"
+                />
+                <div
+                  class="w-10 h-4 bg-gray-300 rounded-full shadow-inner"
+                ></div>
+                <div
+                  class="toggle_dot absolute -left-1 -top-1 w-6 h-6 bg-white rounded-full shadow transition"
+                ></div>
               </div>
-            </div>
-            <input type="text" id="search_text" class="border rounded pl-1 w-9/12" name="search_text" type="text">
+            </label>
           </div>
-        </section>
 
-        <!-- add Setting -->
-        <section id="add_bar" class="mt-5 hidden">
-          <div class="flex flex-row gap-1 h-8">
-            <input type="text" class="border rounded pl-1 w-10/12" name="add_url">
-            <a class="rounded pl-2 pr-2 w-2/12 cursor-pointer bg-green-400 text-white text-center leading-8 hover:opacity-50 text-sm" data-btn-id="ADD">Add</a>
+          <!-- search bar -->
+          <section id="sch_bar" class="mt-5">
+            <div class="flex flex-row gap-1">
+              <div class="flex justify-center w-3/12">
+                <div class="w-full">
+                  <select
+                    name="search_div"
+                    id="search_div"
+                    class="form-select w-full p-2 appearnce-none block text-xs font-normal text-gray-700 bg-white bg-no-repeat border border-solid border-gray-300 rounded transition-all ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    aria-label="Search Menu select Box"
+                  >
+                    <option value="URL" selected>URL</option>
+                    <option value="TITLE" selected>TITLE</option>
+                  </select>
+                </div>
+              </div>
+              <input
+                type="text"
+                id="search_text"
+                class="border rounded pl-1 w-9/12 h-9"
+                name="search_text"
+                type="text"
+              />
+            </div>
+          </section>
+
+          <!-- add Setting -->
+          <section id="add_bar" class="mt-5 hidden">
+            <div class="flex flex-row gap-1 h-9">
+              <input
+                type="text"
+                class="border rounded pl-1 w-10/12"
+                name="add_url"
+              />
+              <a
+                class="rounded pl-2 pr-2 w-2/12 cursor-pointer bg-green-400 text-white text-center leading-8 hover:opacity-50 text-sm"
+                data-btn-id="ADD"
+                >Add</a
+              >
+            </div>
+          </section>
+        </div>
+      </header>
+
+      <!-- body -->
+      <div class="section h-80 overflow-y-auto overflow-x-hidden">
+        <section id="easyFill_body">
+          <!-- content -->
+          <div class="scrolbar">
+            <template id="history_row">
+              <li
+                class="content-row content_item inline-flex flex-row flex-no-wrap flex-shrink items-center w-full h-10 gap-2 relative"
+              >
+                <input
+                  type="text"
+                  class="tabTitle focus:outline-1 focus:outline-green-600 focus:[calc(83.33333333%-2px)] focus:ml-px focus:mr-0.5 rounded pl-1 w-10/12 h-8 whitespace-no-wrap overflow-hidden truncate"
+                  data-uid=""
+                />
+                <button
+                  class="content_btn rounded-full bg-green-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
+                  data-uid=""
+                  data-btn-div="HISTORY_GET"
+                >
+                  <i class="fa-solid fa-right-left" data-icon="Y"></i>
+                </button>
+                <button
+                  class="content_btn rounded-full bg-blue-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
+                  data-uid=""
+                  data-btn-div="HISTORY_LIKE"
+                >
+                  <i class="fa-regular fa-bookmark" data-icon="Y"></i>
+                </button>
+
+                <!-- tooltip -->
+                <div
+                  class="tooltip hidden hover:visible break-all absolute top-10 left-1/4 w-10/12 p-2 pt-3 pb-3 rounded-md bg-blue-50 z-10 leading-5 normal-case"
+                >
+                  <ul>
+                    <li></li>
+                  </ul>
+                </div>
+              </li>
+            </template>
+
+            <template id="favorite_row">
+              <li
+                class="content-row content_item inline-flex flex-row flex-no-wrap flex-shrink items-center w-full h-10 gap-2 relative"
+              >
+                <input
+                  type="text"
+                  class="tabTitle focus:outline-1 focus:outline-green-600 focus:w-[calc(66.666667%-1em)] focus:ml-px focus:mr-0.5 rounded pl-1 w-10/12 h-8 whitespace-no-wrap overflow-hidden truncate"
+                  class="tabTitle focus:outline-1 focus:outline-green-600 focus:w-[calc(66.666667%-1em)] focus:ml-px focus:mr-0.5 rounded pl-1 w-10/12 h-8 whitespace-no-wrap overflow-hidden truncate"
+                  data-uid=""
+                />
+                <button
+                  class="content_btn rounded-full bg-green-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
+                  data-uid=""
+                  data-btn-div="FAVORITE_GET"
+                >
+                  <i class="fa-solid fa-right-left" data-icon="Y"></i>
+                </button>
+                <button
+                  class="content_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
+                  data-uid=""
+                  data-btn-div="FAVORITE_DEL"
+                >
+                  <i class="fa-regular fa-trash-can" data-icon="Y"></i>
+                </button>
+
+                <!-- tooltip -->
+                <div
+                  class="tooltip hidden hover:visible break-all absolute top-10 left-1/4 w-10/12 p-2 pt-3 pb-3 rounded-md bg-blue-50 z-10 leading-5 normal-case"
+                >
+                  <ul>
+                    <li></li>
+                  </ul>
+                </div>
+              </li>
+            </template>
+
+            <template id="settings_row">
+              <li
+                class="content-row content_item inline-flex flex-row flex-no-wrap flex-shrink items-center w-full h-10 gap-1 relative"
+              >
+                <div
+                  class="allow_url w-10/12 whitespace-no-wrap overflow-hidden truncate"
+                ></div>
+                <button
+                  class="setting_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-2/12 h-6 hover:opacity-50"
+                  data-uid=""
+                  data-btn-div="SETTINGS_DEL"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </li>
+            </template>
+
+            <template id="content_empty">
+              <p class="text-center pt-7 pb-7 text-gray-400"></p>
+            </template>
+
+            <!-- request List -->
+            <section id="request_list">
+              <div class="content"></div>
+            </section>
           </div>
         </section>
       </div>
-    </header>
 
-    <!-- body -->
-    <div>
-      <section id="easyFill_body" class="mt-3">
-        <!-- content -->
-        <div class="pl-0 h-84 scrolling-auto overflow-auto">
-          <template id="history_row">
-            <li class="content-row content_item inline-flex flex-row flex-no-wrap flex-shrink items-center w-full h-10 gap-1 relative">
-              <input type="text" class="tabTitle rounded pl-1 w-8/12 h-8 whitespace-no-wrap overflow-hidden truncate" data-uid="">
-              <button class="content_btn rounded-full bg-green-400 text-center leading-6 text-white cursor-pointer w-2/12 h-6 hover:opacity-50"
-              data-uid="" data-btn-div="HISTORY_GET">Get</button>
-              <button class="content_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-2/12 h-6 hover:opacity-50"
-              data-uid="" data-btn-div="HISTORY_LIKE">Like</button>
-
-              <!-- tooltip -->
-              <div class="tooltip">
-                <ul>
-                  <li></li>
-                </ul>
-              </div>
-            </li>
-          </template>
-
-          <template id="favorite_row">
-            <li class="content-row content_item inline-flex flex-row flex-no-wrap flex-shrink items-center w-full h-10 gap-1 relative">
-              <input type="text" class="tabTitle rounded pl-1 w-8/12 h-8 whitespace-no-wrap overflow-hidden truncate" data-uid="">
-              <button class="content_btn rounded-full bg-green-400 text-center leading-6 text-white cursor-pointer w-2/12 h-6 hover:opacity-50"
-              data-uid="" data-btn-div="FAVORITE_GET">Get</button>
-              <button class="content_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-2/12 h-6 hover:opacity-50"
-              data-uid="" data-btn-div="FAVORITE_DEL">Delete</button>
-
-              <!-- tooltip -->
-              <div class="tooltip">
-                <ul>
-                  <li></li>
-                </ul>
-              </div>
-            </li>
-          </template>
-
-          <template id="settings_row">
-            <li class="content-row content_item inline-flex flex-row flex-no-wrap flex-shrink items-center w-full h-10 gap-1 relative">
-              <div class="allow_url w-10/12 whitespace-no-wrap overflow-hidden truncate"></div>
-              <button class="setting_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-2/12 h-6 hover:opacity-50"
-              data-uid="" data-btn-div="SETTINGS_DEL">Delete</button>
-            </li>
-          </template>
-
-          <template id="content_empty">
-            <p class="text-center pt-7 pb-7 text-gray-400"></p>
-          </template>
-
-          <!-- request List -->
-          <section id="request_list">
-            <div class="content"></div>
-          </section>
-        </div>
-
-        <div id="down_arrow" class="flex inline-flex flex-row flex-no-wrap flex-shrink items-center w-full hidden" title="down scroll mark">
-          <a>
-            <span class="arrow"></span>
-            <span class="arrow"></span>
-          </a>
-          <span class="ml-2 text-sm text-green-400">Scroll</span>
-        </div>
-
-      </section>
-
-      <!-- footer -->
-      <footer id="easyFill_fotter"></footer>
+      <!--  -->
+      <div class="w-full mt-5">
+        <a
+          id="clearBtn"
+          class="w-14 py-2 block mx-auto text-center text-white bg-red-400 rounded-md cursor-pointer hover:opacity-70"
+          >CLEAR</a
+        >
+      </div>
     </div>
 
-  </div>
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js" type="module"></script>
+  </body>
 </html>

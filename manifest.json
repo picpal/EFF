@@ -1,10 +1,10 @@
 {
-  "name" : "Form Easy Fill",
+  "name" : "Easy Form Fill",
   "version" : "1.0" ,
   "description" : "Save request history and fill form",
-  "permissions" : ["webRequest" , "tabs"],
+  "permissions" : ["webRequest" , "tabs","scripting"],
   "action" : {
-    "default_title" : "Easy fill" ,
+    "default_title" : "Easy Form Fill" ,
     "default_popup" : "popup/popup.html"
   },
   "host_permissions" : [

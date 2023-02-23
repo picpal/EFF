@@ -6,10 +6,35 @@
  */
 
 const fillForm = (params) => {
+  const radioCheck = () => {
+    const radioGroup = document.getElementsByName("myRadioGroup");
+    let radioValue = "some value";
+    let selectedRadio = null;
+
+    radioGroup.forEach(function (radio) {
+      if (radio.value === radioValue) {
+        selectedRadio = radio;
+      }
+    });
+
+    if (selectedRadio !== null) {
+      selectedRadio.checked = true;
+    }
+  };
+
   for (key in params) {
-    const inputDom = document.querySelector("input[name='" + key + "']");
-    if (inputDom) {
-      document.querySelector('input[name="' + key + '"]').value = params[key];
+    const el = document.querySelector("[name='" + key + "']");
+    if (!el || el.type === "file") continue;
+
+    switch (el.type) {
+      case "checkbox":
+        params[key] ? (el.checked = true) : "";
+        break;
+      case "radio":
+        radioCheck(el, params[key]);
+        break;
+      default:
+        el.value = params[key];
     }
   }
 };

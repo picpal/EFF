@@ -6,20 +6,19 @@
  */
 
 const fillForm = (params) => {
-  const radioCheck = () => {
-    const radioGroup = document.getElementsByName("myRadioGroup");
-    let radioValue = "some value";
+  /**
+   * value 값을 기준으로 radio 태그 체크
+   * 동일한 value 값이 있는 경우 마지막 value를 가진 element를 check
+   */
+  const radioCheck = (name, value) => {
     let selectedRadio = null;
 
-    radioGroup.forEach(function (radio) {
-      if (radio.value === radioValue) {
-        selectedRadio = radio;
-      }
+    const el = document.querySelectorAll('input[name="' + name + '"]');
+    el.forEach((radio) => {
+      if (radio.value === value) selectedRadio = radio;
     });
 
-    if (selectedRadio !== null) {
-      selectedRadio.checked = true;
-    }
+    if (selectedRadio !== null) selectedRadio.checked = true;
   };
 
   for (key in params) {
@@ -31,7 +30,7 @@ const fillForm = (params) => {
         params[key] ? (el.checked = true) : "";
         break;
       case "radio":
-        radioCheck(el, params[key]);
+        radioCheck(key, params[key]);
         break;
       default:
         el.value = params[key];

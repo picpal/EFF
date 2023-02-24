@@ -116,7 +116,7 @@
               >
                 <input
                   type="text"
-                  class="tabTitle focus:outline-1 focus:outline-green-600 focus:[calc(83.33333333%-2px)] focus:ml-px focus:mr-0.5 rounded pl-1 w-10/12 h-8 whitespace-no-wrap overflow-hidden truncate"
+                  class="tabTitle focus:outline-1 focus:outline-green-600 focus:[calc(75%-2px)] focus:ml-px focus:mr-0.5 rounded pl-1 w-9/12 h-8 whitespace-no-wrap overflow-hidden truncate"
                   data-uid=""
                 />
                 <button
@@ -127,21 +127,19 @@
                   <i class="fa-solid fa-right-left" data-icon="Y"></i>
                 </button>
                 <button
+                  class="content_btn rounded-full bg-orange-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
+                  data-uid=""
+                  data-btn-div="HISTORY_DETAIL"
+                >
+                  <i class="fa-solid fa-magnifying-glass" data-icon="Y"></i>
+                </button>
+                <button
                   class="content_btn rounded-full bg-blue-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
                   data-uid=""
                   data-btn-div="HISTORY_LIKE"
                 >
                   <i class="fa-regular fa-bookmark" data-icon="Y"></i>
                 </button>
-
-                <!-- tooltip -->
-                <div
-                  class="tooltip hidden hover:visible break-all absolute top-10 left-1/4 w-10/12 p-2 pt-3 pb-3 rounded-md bg-blue-50 z-10 leading-5 normal-case"
-                >
-                  <ul>
-                    <li></li>
-                  </ul>
-                </div>
               </li>
             </template>
 
@@ -151,7 +149,7 @@
               >
                 <input
                   type="text"
-                  class="tabTitle focus:outline-1 focus:outline-green-600 focus:[calc(83.33333333%-2px)] focus:ml-px focus:mr-0.5 rounded pl-1 w-10/12 h-8 whitespace-no-wrap overflow-hidden truncate"
+                  class="tabTitle focus:outline-1 focus:outline-green-600 focus:[calc(75%-2px)] focus:ml-px focus:mr-0.5 rounded pl-1 w-9/12 h-8 whitespace-no-wrap overflow-hidden truncate"
                   data-uid=""
                 />
                 <button
@@ -162,21 +160,19 @@
                   <i class="fa-solid fa-right-left" data-icon="Y"></i>
                 </button>
                 <button
+                  class="content_btn rounded-full bg-orange-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
+                  data-uid=""
+                  data-btn-div="FAVORITE_DETAIL"
+                >
+                  <i class="fa-solid fa-magnifying-glass" data-icon="Y"></i>
+                </button>
+                <button
                   class="content_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
                   data-uid=""
                   data-btn-div="FAVORITE_DEL"
                 >
                   <i class="fa-regular fa-trash-can" data-icon="Y"></i>
                 </button>
-
-                <!-- tooltip -->
-                <div
-                  class="tooltip hidden hover:visible break-all absolute top-10 left-1/4 w-10/12 p-2 pt-3 pb-3 rounded-md bg-blue-50 z-10 leading-5 normal-case"
-                >
-                  <ul>
-                    <li></li>
-                  </ul>
-                </div>
               </li>
             </template>
 
@@ -204,6 +200,74 @@
             <!-- request List -->
             <section id="request_list">
               <div class="content"></div>
+
+              <div
+                id="viewDetail"
+                class="hidden absolute top-0 left-0 w-full h-full bg-neutral-700 bg-opacity-75"
+              >
+                <div
+                  class="w-11/12 h-5/6 p-3 pb-0 mt-10 mx-auto bg-white rounded-xl"
+                >
+                  <!-- title -->
+                  <div class="p-2 mb-2 text-center">
+                    <span class="text-lg font-bold">Request Params</span>
+                  </div>
+
+                  <!-- content -->
+                  <div
+                    class="popupContent h-4/6 overflow-x-hidden overflow-y-auto"
+                  >
+                    <form>
+                      <table
+                        class="w-full border-collapse border border-gray-300"
+                      >
+                        <thead>
+                          <tr>
+                            <th class="border border-gray-300 px-4 py-2">
+                              Name
+                            </th>
+                            <th class="border border-gray-300 px-4 py-2">
+                              Value
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody id="requestParam">
+                          <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                              param01
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                              <input
+                                class="h-6 w-full"
+                                name="param01"
+                                type="text"
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </form>
+                  </div>
+
+                  <!-- save button -->
+                  <div
+                    class="mt-7 mx-auto w-1/2 flex flex-shrink flex-grow-0 flex-row justify-items-center"
+                  >
+                    <a
+                      id="viewDetailSaveBtn"
+                      class="w-14 py-2 block mx-auto text-center text-white bg-green-400 rounded-md cursor-pointer hover:opacity-70"
+                      >SAVE</a
+                    >
+
+                    <a
+                      id="viewDetailCloseBtn"
+                      class="w-14 py-2 block mx-auto text-center text-white bg-red-400 rounded-md cursor-pointer hover:opacity-70"
+                      >CLOSE</a
+                    >
+                  </div>
+                </div>
+              </div>
             </section>
           </div>
         </section>

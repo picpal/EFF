@@ -1,7 +1,9 @@
 import {
   getContentDom,
   paintErrorMessage,
+  paintViewDetailContent,
   clearContent,
+  clearViewDetailContent,
   hideClearBtn,
   showClearBtn,
 } from "../commonUI.js";
@@ -30,8 +32,7 @@ export default class History {
     return this.#history;
   }
 
-  like(params) {
-    const { uid, tabTitle } = params;
+  like({ uid, tabTitle }) {
     chrome.runtime.sendMessage({ message: "LIKE", uid, tabTitle }, () => true);
   }
 
@@ -68,18 +69,13 @@ export default class History {
         const row = document.importNode($history_row.content, true);
 
         //set btn data
-        const [getBtn, likeBtn] = row.querySelectorAll("button");
-        getBtn.dataset.uid = rowData.uid;
-        likeBtn.dataset.uid = rowData.uid;
+        const buttons = row.querySelectorAll("button");
+        buttons.forEach((button) => (button.dataset.uid = rowData.uid));
 
         //set list data
         const tabTitle = row.querySelector(".tabTitle");
         tabTitle.value = rowData.tabTitle;
         tabTitle.dataset.uid = rowData.uid;
-
-        const tooltip = row.querySelector(".tooltip");
-        const url = tooltip.querySelector("li");
-        url.textContent = rowData.params.url;
 
         $ul.appendChild(row);
       }
@@ -106,5 +102,35 @@ export default class History {
     });
 
     await chrome.tabs.sendMessage(tab.id, { message: "FILL", params });
+  };
+
+  viewDetail = async ({ uid, tabId }) => {
+    // init
+    clearViewDetailContent();
+
+    // get data
+    const params = await chrome.runtime.sendMessage({
+      message: "GET_ROW_DATA",
+      tabId,
+      uid,
+    });
+
+    // create params content
+    params.uid = uid;
+    paintViewDetailContent(params);
+  };
+
+  saveDetailPopup = async (uid, tabId) => {
+    const $viewDetailSaveBtn = document.querySelector("#viewDetailSaveBtn");
+
+    // newValue를 form > input에 입력된 항목으로 설정해줘야 함.
+    // uid도 같이 넘겨줘야 함. 아니면 어떤 항목을 찾아서 바꿔줘야 할 지 알 수 없음.
+
+    // chrome.runtime.sendMessage({
+    //   message: "SET_TITLE",
+    //   storeName,
+    //   uid,
+    //   newValues: { tabTitle },
+    // });
   };
 }

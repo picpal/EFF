@@ -3,6 +3,11 @@ export const clearContent = () => {
   while ($content.firstChild) $content.removeChild($content.firstChild);
 };
 
+export const clearViewDetailContent = () => {
+  const $requestParam = document.querySelector("#requestParam");
+  $requestParam.innerHTML = "";
+};
+
 export const getContentDom = () => {
   const $request_list = document.querySelector("#request_list");
   const $content = $request_list?.querySelector(".content");
@@ -32,6 +37,37 @@ export const paintErrorMessage = (message) => {
   if (message) $message.innerText = message;
 
   $content.appendChild(cloneNode);
+};
+
+export const paintViewDetailContent = (params) => {
+  const $requestParam = document.querySelector("#requestParam");
+
+  if (params && $requestParam) {
+    let $tr, $paramName, $paramValue;
+    for (let key in params) {
+      $tr = document.createElement("tr");
+      $paramName = document.createElement("td");
+      $paramValue = document.createElement("td");
+
+      // add class
+      $paramName.className = "border border-gray-300 px-4 py-2";
+      $paramValue.className = "border border-gray-300 px-4 py-2";
+
+      // set tag
+      $paramName.innerHTML = `${key}`;
+      $paramValue.innerHTML = `<input type="text" class="h-6 w-full" name="${key}" value="${params[key]}"/>`;
+
+      $tr.appendChild($paramName);
+      $tr.appendChild($paramValue);
+      $requestParam.appendChild($tr);
+    }
+
+    document.querySelector("#viewDetail").classList.remove("hidden");
+  } else {
+    console.error(`param error`);
+    console.error($requestParam);
+    console.error(params);
+  }
 };
 
 export const hideClearBtn = () => {

@@ -242,6 +242,22 @@ const deleteAllItem = (storeName) => {
   };
 };
 
+const deepCopy = (obj) => {
+  if (obj === null || typeof obj !== "object") {
+    return obj;
+  }
+
+  const copy = Array.isArray(obj) ? [] : {};
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      copy[key] = deepCopy(obj[key]);
+    }
+  }
+
+  return copy;
+};
+
 const setState = (state, value) => {
   const dbRequest = openIndexDB();
 
@@ -279,9 +295,7 @@ const setState = (state, value) => {
   };
 };
 
-const setItem = (params) => {
-  const { storeName, uid, tabTitle } = params;
-
+const setItem = ({ storeName, uid, newValues }) => {
   const dbRequest = openIndexDB();
 
   dbRequest.onupgradeneeded = () => {
@@ -313,10 +327,10 @@ const setItem = (params) => {
     };
 
     request.onsuccess = () => {
-      const data = request.result;
-
-      //하드코딩 => 전체 데이터 깊은 복사로 덮어써야함.
-      data.tabTitle = tabTitle;
+      /**
+       * @TODO 깊은 복사 방법으로 변경해야 함...
+       */
+      const data = { ...deepCopy(request.result), ...newValues };
 
       const updateRequest = store.put(data);
 

@@ -1,7 +1,11 @@
 import History from "./popupTabs/History.js";
 import Favorite from "./popupTabs/Favorite.js";
 import Settings from "./popupTabs/Settings.js";
-import { getActiveTabId, paintErrorMessage } from "./commonUI.js";
+import {
+  getActiveTabId,
+  paintErrorMessage,
+  clearViewDetailContent,
+} from "./commonUI.js";
 
 export default class Popup {
   #history;
@@ -28,6 +32,7 @@ export default class Popup {
     this.listBtnClickHandler();
     this.headerClickHandler();
     this.clearClickHandler();
+    this.closeClickHandler();
     this.searchInputHandler();
   }
 
@@ -56,6 +61,21 @@ export default class Popup {
     }
 
     return result;
+  };
+
+  saveClickHandler = () => {
+    const $viewDetailSaveBtn = document.querySelector("#viewDetailSaveBtn");
+    $viewDetailSaveBtn.addEventListener("click", (e) => {
+      saveDetailPopup();
+    });
+  };
+
+  closeClickHandler = () => {
+    const $viewDetailCloseBtn = document.querySelector("#viewDetailCloseBtn");
+    $viewDetailCloseBtn.addEventListener("click", (e) => {
+      clearViewDetailContent();
+      document.querySelector("#viewDetail").classList.add("hidden");
+    });
   };
 
   clearClickHandler = () => {
@@ -139,6 +159,7 @@ export default class Popup {
       let tabTitle =
         e.target.parentNode.querySelector(".tabTitle")?.value || "";
 
+      // icon click 대응
       if (e.target.dataset.icon === "Y") {
         uid = e.target.parentNode.dataset.uid;
         btnDiv = e.target.parentNode.dataset.btnDiv;
@@ -149,8 +170,9 @@ export default class Popup {
 
       if (uid === "" || btnDiv === "") return;
 
-      this.sendMessageToBackground(btnDiv, { uid, tabTitle });
-      await this.sendMessageToClient(btnDiv, { uid });
+      this.showDetailPopup(btnDiv, uid);
+      this.sendMessageToBackground({ btnDiv, uid, tabTitle });
+      this.sendMessageToClient(btnDiv, uid);
     });
   };
 
@@ -179,7 +201,7 @@ export default class Popup {
           message: "SET_TITLE",
           storeName,
           uid,
-          tabTitle,
+          newValues: { tabTitle },
         });
       }
     });
@@ -272,26 +294,50 @@ export default class Popup {
     content.render(filterData);
   };
 
-  sendMessageToBackground = (btnDiv, params) => {
+  showDetailPopup = (btnDiv, uid) => {
+    const tabId = getActiveTabId();
+
     switch (btnDiv) {
-      case "HISTORY_LIKE":
-        this.#history.like(params);
+      case "HISTORY_DETAIL":
+        this.#history.viewDetail({ uid, tabId });
         break;
-      case "FAVORITE_DEL":
-        this.#favorite.remove(params);
-        break;
-      case "SETTINGS_DEL":
-        this.#settings.remove(params);
+      case "FAVORITE_DETAIL":
+        this.#favorite.viewDetail({ uid, tabId });
         break;
     }
   };
 
-  sendMessageToClient = async (btnDiv, params) => {
-    const { uid } = params;
+  saveDetailPopup = (btnDiv, uid, newValues) => {
+    const tabId = getActiveTabId();
 
     switch (btnDiv) {
+      case "HISTORY_DETAIL_SAVE":
+        this.#history.saveDetail(uid, tabId);
+        break;
+      case "FAVORITE_DETAIL_SAVE":
+        this.#favorite.saveDetail(uid, tabId);
+        break;
+    }
+  };
+
+  sendMessageToBackground = ({ btnDiv, uid, tabTitle }) => {
+    switch (btnDiv) {
+      case "HISTORY_LIKE":
+        this.#history.like({ uid, tabTitle });
+        break;
+      case "FAVORITE_DEL":
+        this.#favorite.remove({ uid, tabTitle });
+        break;
+      case "SETTINGS_DEL":
+        this.#settings.remove({ uid, tabTitle });
+        break;
+    }
+  };
+
+  sendMessageToClient = (btnDiv, uid) => {
+    switch (btnDiv) {
       case "HISTORY_GET":
-        await this.#history.fillForm(uid);
+        this.#history.fillForm(uid);
         break;
       case "FAVORITE_GET":
         this.#favorite.fillForm(uid);

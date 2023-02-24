@@ -1,7 +1,9 @@
 import {
   getContentDom,
   paintErrorMessage,
+  paintViewDetailContent,
   clearContent,
+  clearViewDetailContent,
   hideClearBtn,
   showClearBtn,
 } from "../commonUI.js";
@@ -71,19 +73,14 @@ export default class Favorite {
         const rowData = dataList[i];
         const row = document.importNode($favorite_row.content, true);
 
-        //set btn data
-        const [getBtn, likeBtn] = row.querySelectorAll("button");
-        getBtn.dataset.uid = rowData.uid;
-        likeBtn.dataset.uid = rowData.uid;
+        //set uid for button
+        const buttons = row.querySelectorAll("button");
+        buttons.forEach((button) => (button.dataset.uid = rowData.uid));
 
-        //set list data
+        //set value,uid for list
         const tabTitle = row.querySelector(".tabTitle");
         tabTitle.value = rowData.tabTitle;
         tabTitle.dataset.uid = rowData.uid;
-
-        const tooltip = row.querySelector(".tooltip");
-        const url = tooltip.querySelector("li");
-        url.textContent = rowData.params.url;
 
         $ul.appendChild(row);
       }
@@ -110,5 +107,20 @@ export default class Favorite {
     });
 
     await chrome.tabs.sendMessage(tab.id, { message: "FILL", params });
+  };
+
+  viewDetail = async ({ uid, tabId }) => {
+    // init
+    clearViewDetailContent();
+
+    // get data
+    const params = await chrome.runtime.sendMessage({
+      message: "GET_ROW_DATA",
+      tabId,
+      uid,
+    });
+
+    // create params content
+    paintViewDetailContent(params);
   };
 }

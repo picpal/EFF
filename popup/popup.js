@@ -180,10 +180,15 @@ export default class Popup {
 
       if (uid === "" || btnDiv === "") return;
 
-      if (btnDiv === "DETAIL") this.showDetailPopup(uid);
+      const content = this.getContentInstance(); // active now tab instance
+      if (!content) {
+        console.error("not found content instance");
+      }
+
+      if (btnDiv === "DETAIL") content.viewDetail(uid);
+      if (btnDiv === "DEL") content.remove({ uid, tabTitle });
+      if (btnDiv === "GET") content.fillForm(uid);
       if (btnDiv === "LIKE") this.#history.like({ uid, tabTitle });
-      if (btnDiv === "DEL") this.removeRowData({ uid, tabTitle });
-      this.sendMessageToClient(btnDiv, uid);
     });
   };
 
@@ -296,44 +301,6 @@ export default class Popup {
     content.render(filterData);
   };
 
-  showDetailPopup = (uid) => {
-    const content = this.getContentInstance();
-
-    if (!content) return;
-
-    content.viewDetail(uid);
-  };
-
-  saveDetailPopup = (btnDiv) => {
-    switch (btnDiv) {
-      case "HISTORY_DETAIL_SAVE":
-        this.#history.saveDetail();
-        break;
-      case "FAVORITE_DETAIL_SAVE":
-        this.#favorite.saveDetail();
-        break;
-    }
-  };
-
-  removeRowData = ({ uid, tabTitle }) => {
-    const content = this.getContentInstance();
-
-    if (!content) return;
-
-    content.remove({ uid, tabTitle });
-  };
-
-  sendMessageToClient = (btnDiv, uid) => {
-    switch (btnDiv) {
-      case "HISTORY_GET":
-        this.#history.fillForm(uid);
-        break;
-      case "FAVORITE_GET":
-        this.#favorite.fillForm(uid);
-        break;
-    }
-  };
-
   selectBoxChangeHandler = () => {
     const $search_div = document.querySelector("#search_div");
     $search_div.addEventListener("change", () => {
@@ -347,6 +314,7 @@ export default class Popup {
 
     $search_text.addEventListener("keyup", (e) => {
       const tabId = getActiveTabId();
+
       if (tabId === "" || tabId === "SETTINGS") return;
 
       this.setFilterContentList(e.target.value);

@@ -10,8 +10,11 @@ import {
 
 export default class Favorite {
   #favorite;
+  #tabId;
 
-  constructor() {}
+  constructor() {
+    this.#tabId = "FAVORITE";
+  }
 
   setState = (data) => {
     this.#favorite = data;
@@ -33,10 +36,10 @@ export default class Favorite {
     const { uid } = params;
     chrome.runtime.sendMessage({
       message: "DELETE",
-      params: { uid, tabId: "FAVORITE" },
+      params: { uid, tabId: this.#tabId },
     });
 
-    chrome.runtime.sendMessage({ message: "FAVORITE" }, (response) => {
+    chrome.runtime.sendMessage({ message: this.#tabId }, (response) => {
       this.render(response);
     });
   };
@@ -102,21 +105,21 @@ export default class Favorite {
 
     const params = await chrome.runtime.sendMessage({
       message: "GET_ROW_DATA",
-      tabId: "FAVORITE",
+      tabId: this.#tabId,
       uid,
     });
 
     await chrome.tabs.sendMessage(tab.id, { message: "FILL", params });
   };
 
-  viewDetail = async ({ uid, tabId }) => {
+  viewDetail = async (uid) => {
     // init
     clearViewDetailContent();
 
     // get data
     const params = await chrome.runtime.sendMessage({
       message: "GET_ROW_DATA",
-      tabId,
+      tabId: this.#tabId,
       uid,
     });
 

@@ -414,7 +414,7 @@ const getDate = (format) => {
   let result = "";
   switch (format) {
     case "fullDate":
-      result = `${year}+${month}${day}${time}`;
+      result = `${year}${month}${day}${time}`;
       break;
     default: // YYYYMMDD
       result = `${year}${month}${day}`;

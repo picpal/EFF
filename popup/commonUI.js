@@ -62,7 +62,15 @@ export const paintViewDetailContent = (params) => {
       $requestParam.appendChild($tr);
     }
 
-    document.querySelector("#viewDetail").classList.remove("hidden");
+    const $viewDetail = document.querySelector("#viewDetail");
+    $viewDetail.classList.remove("hidden");
+
+    const $inputUid = document.createElement("input");
+    $inputUid.id = "dataUid";
+    $inputUid.className = "hidden";
+    $inputUid.value = params.uid;
+
+    $viewDetail.appendChild($inputUid);
   } else {
     console.error(`param error`);
     console.error($requestParam);

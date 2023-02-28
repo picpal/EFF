@@ -39,11 +39,11 @@ export default class History {
   removeAll = (tabId) => {
     chrome.runtime.sendMessage({
       message: "DELETE_ALL",
-      params: { tabId },
+      params: { tabId: this.#tabId },
     });
 
     // re render
-    chrome.runtime.sendMessage({ message: "HISTORY" }, (response) => {
+    chrome.runtime.sendMessage({ message: this.#tabId }, (response) => {
       this.render(response);
     });
   };
@@ -97,40 +97,43 @@ export default class History {
 
     const params = await chrome.runtime.sendMessage({
       message: "GET_ROW_DATA",
-      tabId: "HISTORY",
+      tabId: this.#tabId,
       uid,
     });
 
     await chrome.tabs.sendMessage(tab.id, { message: "FILL", params });
   };
 
-  viewDetail = async ({ uid, tabId }) => {
+  viewDetail = async (uid) => {
     // init
     clearViewDetailContent();
 
     // get data
     const params = await chrome.runtime.sendMessage({
       message: "GET_ROW_DATA",
-      tabId,
+      tabId: this.#tabId,
       uid,
     });
 
     // create params content
-    params.uid = uid;
-    paintViewDetailContent(params);
+    const esentialParams = { uid };
+    paintViewDetailContent({ ...params, ...esentialParams });
   };
 
-  saveDetailPopup = async (uid, tabId) => {
-    const $viewDetailSaveBtn = document.querySelector("#viewDetailSaveBtn");
+  saveDetail = async (newValues) => {
+    // form data
+    const $viewDetailForm = document.querySelector("#viewDetailForm");
 
-    // newValue를 form > input에 입력된 항목으로 설정해줘야 함.
-    // uid도 같이 넘겨줘야 함. 아니면 어떤 항목을 찾아서 바꿔줘야 할 지 알 수 없음.
+    console.log(`==================================================`);
+    console.log(`storeName : ${this.#tabId} , uid : ${uid}`);
+    console.log(newValues);
+    console.log(`==================================================`);
 
     // chrome.runtime.sendMessage({
-    //   message: "SET_TITLE",
-    //   storeName,
+    //   message: "SET_ROW_DATA",
+    //   storeName: this.#tabId,
     //   uid,
-    //   newValues: { tabTitle },
+    //   newValues,
     // });
   };
 }

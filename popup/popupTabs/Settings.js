@@ -8,8 +8,10 @@ import {
 
 export default class Settings {
   #settings;
+  #tabId;
 
   constructor() {
+    this.#tabId = "SETTINGS";
     this.#settings = {};
   }
 
@@ -31,12 +33,12 @@ export default class Settings {
 
   remove = (params) => {
     const { uid } = params;
+    chrome.runtime.sendMessage({
+      message: "DELETE",
+      params: { uid, tabId: this.#tabId },
+    });
 
-    chrome.runtime.sendMessage(
-      { message: "DELETE", params: { uid, tabId: "SETTINGS" } },
-      () => true
-    );
-    chrome.runtime.sendMessage({ message: "SETTINGS" }, (response) => {
+    chrome.runtime.sendMessage({ message: this.#tabId }, (response) => {
       this.render(response);
     });
   };
@@ -48,7 +50,7 @@ export default class Settings {
     });
 
     // re render
-    chrome.runtime.sendMessage({ message: "SETTINGS" }, (response) => {
+    chrome.runtime.sendMessage({ message: this.#tabId }, (response) => {
       this.render(response);
     });
   };

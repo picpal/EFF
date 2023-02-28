@@ -34,6 +34,7 @@ export default class Popup {
     this.clearClickHandler();
     this.closeClickHandler();
     this.searchInputHandler();
+    this.saveClickHandler();
   }
 
   clearHeaderInput = () => {
@@ -58,6 +59,11 @@ export default class Popup {
       case "FAVORITE":
         result = this.#favorite;
         break;
+      case "SETTINGS":
+        result = this.#settings;
+        break;
+      default:
+        result = null;
     }
 
     return result;
@@ -84,7 +90,11 @@ export default class Popup {
       const tabId = getActiveTabId();
 
       if (confirm(`Are you sure you want to delete all ${tabId} data?`)) {
-        this.#history.removeAll(tabId);
+        let content = this.getContentInstance();
+        if (!content) return;
+
+        content.removeAll(tabId);
+
         this.clearHeaderInput();
         this.renderHeaderInput();
         this.renderContent();
@@ -170,8 +180,9 @@ export default class Popup {
 
       if (uid === "" || btnDiv === "") return;
 
-      this.showDetailPopup(btnDiv, uid);
-      this.sendMessageToBackground({ btnDiv, uid, tabTitle });
+      if (btnDiv === "DETAIL") this.showDetailPopup(uid);
+      if (btnDiv === "LIKE") this.#history.like({ uid, tabTitle });
+      if (btnDiv === "DEL") this.removeRowData({ uid, tabTitle });
       this.sendMessageToClient(btnDiv, uid);
     });
   };
@@ -250,28 +261,19 @@ export default class Popup {
   };
 
   setContentData = (state) => {
-    const tabId = getActiveTabId();
+    const content = this.getContentInstance();
 
-    switch (tabId) {
-      case "SETTINGS":
-        this.#settings.setState(state);
-        break;
-      case "HISTORY":
-        this.#history.setState(state);
-        break;
-      case "FAVORITE":
-        this.#favorite.setState(state);
-        break;
-      default:
-        paintErrorMessage("Not found Active Tab id");
-        break;
+    if (!content) {
+      paintErrorMessage("not found content instance");
+      return;
     }
+
+    content.setState(state);
   };
 
   setFilterContentList = (filterText) => {
     // set content instance
     let content = this.getContentInstance();
-    console.log(content);
 
     // content data filtering
     let tabData, filterData;
@@ -294,44 +296,31 @@ export default class Popup {
     content.render(filterData);
   };
 
-  showDetailPopup = (btnDiv, uid) => {
-    const tabId = getActiveTabId();
+  showDetailPopup = (uid) => {
+    const content = this.getContentInstance();
 
-    switch (btnDiv) {
-      case "HISTORY_DETAIL":
-        this.#history.viewDetail({ uid, tabId });
-        break;
-      case "FAVORITE_DETAIL":
-        this.#favorite.viewDetail({ uid, tabId });
-        break;
-    }
+    if (!content) return;
+
+    content.viewDetail(uid);
   };
 
-  saveDetailPopup = (btnDiv, uid, newValues) => {
-    const tabId = getActiveTabId();
-
+  saveDetailPopup = (btnDiv) => {
     switch (btnDiv) {
       case "HISTORY_DETAIL_SAVE":
-        this.#history.saveDetail(uid, tabId);
+        this.#history.saveDetail();
         break;
       case "FAVORITE_DETAIL_SAVE":
-        this.#favorite.saveDetail(uid, tabId);
+        this.#favorite.saveDetail();
         break;
     }
   };
 
-  sendMessageToBackground = ({ btnDiv, uid, tabTitle }) => {
-    switch (btnDiv) {
-      case "HISTORY_LIKE":
-        this.#history.like({ uid, tabTitle });
-        break;
-      case "FAVORITE_DEL":
-        this.#favorite.remove({ uid, tabTitle });
-        break;
-      case "SETTINGS_DEL":
-        this.#settings.remove({ uid, tabTitle });
-        break;
-    }
+  removeRowData = ({ uid, tabTitle }) => {
+    const content = this.getContentInstance();
+
+    if (!content) return;
+
+    content.remove({ uid, tabTitle });
   };
 
   sendMessageToClient = (btnDiv, uid) => {

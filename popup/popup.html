@@ -129,14 +129,14 @@
                 <button
                   class="content_btn rounded-full bg-orange-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
                   data-uid=""
-                  data-btn-div="HISTORY_DETAIL"
+                  data-btn-div="DETAIL"
                 >
                   <i class="fa-solid fa-magnifying-glass" data-icon="Y"></i>
                 </button>
                 <button
                   class="content_btn rounded-full bg-blue-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
                   data-uid=""
-                  data-btn-div="HISTORY_LIKE"
+                  data-btn-div="LIKE"
                 >
                   <i class="fa-regular fa-bookmark" data-icon="Y"></i>
                 </button>
@@ -162,14 +162,14 @@
                 <button
                   class="content_btn rounded-full bg-orange-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
                   data-uid=""
-                  data-btn-div="FAVORITE_DETAIL"
+                  data-btn-div="DETAIL"
                 >
                   <i class="fa-solid fa-magnifying-glass" data-icon="Y"></i>
                 </button>
                 <button
                   class="content_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-1/12 h-6 hover:opacity-50"
                   data-uid=""
-                  data-btn-div="FAVORITE_DEL"
+                  data-btn-div="DEL"
                 >
                   <i class="fa-regular fa-trash-can" data-icon="Y"></i>
                 </button>
@@ -186,9 +186,9 @@
                 <button
                   class="setting_btn rounded-full bg-red-400 text-center leading-6 text-white cursor-pointer w-2/12 h-6 hover:opacity-50"
                   data-uid=""
-                  data-btn-div="SETTINGS_DEL"
+                  data-btn-div="DEL"
                 >
-                  <i class="fa-regular fa-trash-can"></i>
+                  <i class="fa-regular fa-trash-can" data-icon="Y"></i>
                 </button>
               </li>
             </template>
@@ -217,7 +217,7 @@
                   <div
                     class="popupContent h-4/6 overflow-x-hidden overflow-y-auto"
                   >
-                    <form>
+                    <form id="viewDetailForm" name="viewDetailForm">
                       <table
                         class="w-full border-collapse border border-gray-300"
                       >

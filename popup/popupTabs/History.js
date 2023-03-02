@@ -120,20 +120,17 @@ export default class History {
     paintViewDetailContent({ ...params, ...esentialParams });
   };
 
-  saveDetail = async (newValues) => {
-    // form data
-    const $viewDetailForm = document.querySelector("#viewDetailForm");
+  saveDetail = async (formData) => {
+    const params = { ...formData };
 
-    console.log(`==================================================`);
-    console.log(`storeName : ${this.#tabId} , uid : ${uid}`);
-    console.log(newValues);
-    console.log(`==================================================`);
+    // ignore key
+    delete params.uid;
 
-    // chrome.runtime.sendMessage({
-    //   message: "SET_ROW_DATA",
-    //   storeName: this.#tabId,
-    //   uid,
-    //   newValues,
-    // });
+    chrome.runtime.sendMessage({
+      message: "SET_ROW_DATA",
+      storeName: this.#tabId,
+      uid: formData.uid,
+      newValues: { params },
+    });
   };
 }

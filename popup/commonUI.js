@@ -59,18 +59,17 @@ export const paintViewDetailContent = (params) => {
 
       $tr.appendChild($paramName);
       $tr.appendChild($paramValue);
+
+      /**
+       * request paramerter name중 uid가 존재한다면 오류가 날 듯...
+       */
+      if (key === "uid") $tr.classList.add("hidden"); //  "uid" is data primary key.
+
       $requestParam.appendChild($tr);
     }
 
     const $viewDetail = document.querySelector("#viewDetail");
     $viewDetail.classList.remove("hidden");
-
-    const $inputUid = document.createElement("input");
-    $inputUid.id = "dataUid";
-    $inputUid.className = "hidden";
-    $inputUid.value = params.uid;
-
-    $viewDetail.appendChild($inputUid);
   } else {
     console.error(`param error`);
     console.error($requestParam);

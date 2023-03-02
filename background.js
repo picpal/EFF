@@ -498,6 +498,10 @@ chrome.runtime.onMessage.addListener((request, callback, sendResponse) => {
     case "SET_TITLE":
       setItem(request);
       break;
+    case "SET_ROW_DATA":
+      console.log(" ============== SET_ROW_DATA =================");
+      setItem(request);
+      break;
     case "DELETE":
       const { uid, tabId } = request.params;
       deleteItem(tabId, uid);

@@ -63,7 +63,9 @@ export default class Popup {
         result = this.#settings;
         break;
       default:
+        paintErrorMessage("not found content instance");
         result = null;
+        break;
     }
 
     return result;
@@ -72,7 +74,17 @@ export default class Popup {
   saveClickHandler = () => {
     const $viewDetailSaveBtn = document.querySelector("#viewDetailSaveBtn");
     $viewDetailSaveBtn.addEventListener("click", (e) => {
-      saveDetailPopup();
+      const content = this.getContentInstance();
+
+      if (!content) return;
+
+      const viewDetailParams = {};
+      const $inputs = document.querySelectorAll("#viewDetailForm input");
+      $inputs.forEach((item) => {
+        viewDetailParams[item.name] = item.value;
+      });
+
+      content.saveDetail(viewDetailParams);
     });
   };
 
@@ -91,6 +103,7 @@ export default class Popup {
 
       if (confirm(`Are you sure you want to delete all ${tabId} data?`)) {
         let content = this.getContentInstance();
+
         if (!content) return;
 
         content.removeAll(tabId);
@@ -169,7 +182,12 @@ export default class Popup {
       let tabTitle =
         e.target.parentNode.querySelector(".tabTitle")?.value || "";
 
-      // icon click 대응
+      /**
+       * icon click
+       * icon 영역을 클릭하게 되면 버튼이 icon의 부모가 되면서
+       * 버튼의 부모 dataset을 가져오지 못함.
+       * 이 부분에 대한 icon 클릭에 대한 대응
+       */
       if (e.target.dataset.icon === "Y") {
         uid = e.target.parentNode.dataset.uid;
         btnDiv = e.target.parentNode.dataset.btnDiv;
@@ -178,12 +196,10 @@ export default class Popup {
           "";
       }
 
-      if (uid === "" || btnDiv === "") return;
+      if (!uid || !btnDiv) return;
 
       const content = this.getContentInstance(); // active now tab instance
-      if (!content) {
-        console.error("not found content instance");
-      }
+      if (!content) console.error("not found content instance");
 
       if (btnDiv === "DETAIL") content.viewDetail(uid);
       if (btnDiv === "DEL") content.remove({ uid, tabTitle });
@@ -195,7 +211,7 @@ export default class Popup {
   listFocusHandler = () => {
     let oldVal, newVal;
 
-    const $list = document.querySelector("#request_list");
+    const $list = document.querySelector("#request_list .content");
     $list.addEventListener("focusin", (e) => {
       oldVal = e.target.value;
 
@@ -209,7 +225,7 @@ export default class Popup {
       const uid = e.target.dataset.uid || "";
       newVal = e.target.value;
 
-      if (oldVal != newVal) {
+      if (uid && oldVal != newVal) {
         const tabTitle = newVal;
         const storeName = getActiveTabId();
 
@@ -268,17 +284,16 @@ export default class Popup {
   setContentData = (state) => {
     const content = this.getContentInstance();
 
-    if (!content) {
-      paintErrorMessage("not found content instance");
-      return;
-    }
+    if (!content) return;
 
     content.setState(state);
   };
 
   setFilterContentList = (filterText) => {
     // set content instance
-    let content = this.getContentInstance();
+    const content = this.getContentInstance();
+
+    if (!content) return;
 
     // content data filtering
     let tabData, filterData;

@@ -124,6 +124,21 @@ export default class Favorite {
     });
 
     // create params content
-    paintViewDetailContent(params);
+    const esentialParams = { uid };
+    paintViewDetailContent({ ...params, ...esentialParams });
+  };
+
+  saveDetail = async (formData) => {
+    const params = { ...formData };
+
+    // ignore key
+    delete params.uid;
+
+    await chrome.runtime.sendMessage({
+      message: "SET_ROW_DATA",
+      storeName: this.#tabId,
+      uid: formData.uid,
+      newValues: { params },
+    });
   };
 }

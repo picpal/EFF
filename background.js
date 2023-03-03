@@ -477,11 +477,11 @@ chrome.runtime.onMessage.addListener((request, callback, sendResponse) => {
         sendResponse(result);
       });
       break;
-    case "SET_HISTORY_STATE":
-      setState("ALL_HISTORY", request.toggleState);
+    case "SET_REQUEST_STATE":
+      setState("ALL_REQUEST", request.toggleState);
       break;
-    case "GET_HISTORY_STATE":
-      getState("ALL_HISTORY").then((state) => {
+    case "GET_REQUEST_STATE":
+      getState("ALL_REQUEST").then((state) => {
         sendResponse(state);
       });
       break;
@@ -519,7 +519,7 @@ chrome.runtime.onMessage.addListener((request, callback, sendResponse) => {
 
 chrome.webRequest.onBeforeRequest.addListener(
   (info) => {
-    getState("ALL_HISTORY").then((state) => {
+    getState("ALL_REQUEST").then((state) => {
       if (state) {
         if (info.requestBody) {
           addItem(STORE_NAMES[0], getRequestParam(info));

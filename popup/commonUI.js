@@ -6,6 +6,7 @@ export const clearContent = () => {
 export const clearViewDetailContent = () => {
   const $requestParam = document.querySelector("#requestParam");
   $requestParam.innerHTML = "";
+  document.querySelector("#viewDetail").classList.add("hidden");
 };
 
 export const getContentDom = () => {

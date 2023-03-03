@@ -17,13 +17,13 @@ export default class Popup {
     this.#favorite = new Favorite();
     this.#settings = new Settings();
 
-    chrome.runtime.sendMessage({ message: "GET_HISTORY_STATE" }, (response) => {
+    chrome.runtime.sendMessage({ message: "GET_REQUEST_STATE" }, (response) => {
       document.querySelector("#toggle_btn").checked = response;
       return true;
     });
 
-    chrome.runtime.sendMessage({ message: "HISTORY" }, (response) => {
-      this.#history.setData(response);
+    chrome.runtime.sendMessage({ message: "FAVORITE" }, (response) => {
+      this.#favorite.setData(response);
       return true;
     });
 
@@ -85,6 +85,7 @@ export default class Popup {
       });
 
       content.saveDetail(viewDetailParams);
+      clearViewDetailContent();
     });
   };
 
@@ -92,7 +93,6 @@ export default class Popup {
     const $viewDetailCloseBtn = document.querySelector("#viewDetailCloseBtn");
     $viewDetailCloseBtn.addEventListener("click", (e) => {
       clearViewDetailContent();
-      document.querySelector("#viewDetail").classList.add("hidden");
     });
   };
 
@@ -138,10 +138,10 @@ export default class Popup {
       if (target.dataset.btnId) {
         const btnId = target.dataset.btnId;
         switch (btnId) {
-          case "ALL_HISTORY":
+          case "ALL_REQUEST":
             const toggleState = target.checked;
             chrome.runtime.sendMessage({
-              message: "SET_HISTORY_STATE",
+              message: "SET_REQUEST_STATE",
               toggleState,
             });
             break;

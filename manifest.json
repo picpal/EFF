@@ -1,10 +1,10 @@
 {
   "name" : "Form Easy Fill",
   "version" : "1.0" ,
-  "description" : "Save request history and fill form",
+  "description" : "You can save the request history and reload the parameters of the saved request.",
   "permissions" : ["webRequest" , "tabs","scripting"],
   "action" : {
-    "default_title" : "Easy fill" ,
+    "default_title" : "Form Easy Fill" ,
     "default_popup" : "popup/popup.html"
   },
   "host_permissions" : [

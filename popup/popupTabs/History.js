@@ -126,7 +126,7 @@ export default class History {
     // ignore key
     delete params.uid;
 
-    chrome.runtime.sendMessage({
+    await chrome.runtime.sendMessage({
       message: "SET_ROW_DATA",
       storeName: this.#tabId,
       uid: formData.uid,
